@@ -1,5 +1,5 @@
-function fast() { //sets typing speed as fast as possible with no randomness 
-  	typingSpeed(0,0)
+function fast() {  
+  	typingSpeed(0,0) //sets typing speed as fast as possible with no randomness
 }
 
 function startPS() { //starts powershell (if fails on slower computers extend the delays and see if that helps)
